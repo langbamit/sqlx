@@ -57,3 +57,34 @@ pub async fn run_drop() -> anyhow::Result<()> {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::env;
+
+    #[async_std::test]
+    async fn test_create_postgres() {
+        env::set_var("DATABASE_URL", "postgres://up:up@localhost:5432/up");
+        match run_create().await {
+            Ok(_) => {}
+            Err(e) => {
+                print!("{:?}", e);  
+                assert!(false)
+            }
+        }
+    }
+
+    #[async_std::test]
+    async fn test_drop_postgres() {
+        env::set_var("DATABASE_URL", "postgres://up:up@localhost:5432/up");
+        match run_drop().await {
+            Ok(_) => {}
+            Err(e) => {
+                print!("{:?}", e);
+                assert!(false)
+            }
+        }
+    }
+
+}

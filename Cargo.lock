@@ -2248,9 +2248,10 @@ dependencies = [
 
 [[package]]
 name = "sqlx-cli"
-version = "0.1.0-pre"
+version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-std",
  "async-trait",
  "cargo_metadata",
  "chrono",

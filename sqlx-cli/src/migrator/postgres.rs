@@ -67,9 +67,9 @@ impl DatabaseMigrator for Postgres {
     async fn check_if_database_exists(&self, db_name: &str) -> Result<bool> {
         let db_url = get_base_url(&self.db_url)?;
 
-        let base_url = db_url.base_url;
+        let postgres_db_url = format!("{}/postgres", db_url.base_url);
 
-        let mut conn = PgConnection::connect(base_url).await?;
+        let mut conn = PgConnection::connect(&postgres_db_url).await?;
 
         let result: bool =
             sqlx::query("select exists(SELECT 1 from pg_database WHERE datname = $1) as exists")
@@ -85,9 +85,9 @@ impl DatabaseMigrator for Postgres {
     async fn create_database(&self, db_name: &str) -> Result<()> {
         let db_url = get_base_url(&self.db_url)?;
 
-        let base_url = db_url.base_url;
+        let postgres_db_url = format!("{}/postgres", db_url.base_url);
 
-        let mut conn = PgConnection::connect(base_url).await?;
+        let mut conn = PgConnection::connect(&postgres_db_url).await?;
 
         // quote database name (quotes in the name are escaped with additional quotes)
         sqlx::query(&format!(
@@ -104,9 +104,9 @@ impl DatabaseMigrator for Postgres {
     async fn drop_database(&self, db_name: &str) -> Result<()> {
         let db_url = get_base_url(&self.db_url)?;
 
-        let base_url = db_url.base_url;
+        let postgres_db_url = format!("{}/postgres", db_url.base_url);
 
-        let mut conn = PgConnection::connect(base_url).await?;
+        let mut conn = PgConnection::connect(&postgres_db_url).await?;
 
         sqlx::query(&format!(
             "DROP DATABASE \"{}\"",
